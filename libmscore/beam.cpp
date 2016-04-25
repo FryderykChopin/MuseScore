@@ -1965,8 +1965,12 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   if (cr2 == crl.last() && cr2 != _elements.last())
                         x3 >= x2 ? x3 += beamMinLen : x2 += beamMinLen;
                   // prolong the beam if the group starts a system:
-                  if (cr1 == crl.first() && cr1 != _elements.first())
-                        x2 <= x3 ? x2 -= beamMinLen : x3 += beamMinLen;
+                  if (cr1 == crl.first() && cr1 != _elements.first()) {
+                        x2 <= x3 ? x2 -= 1.5*beamMinLen : x3 += 1.5*beamMinLen;
+                        // if the first note is the last of the system too
+                        if (cr1 == _elements.last())
+                              x3 = x1 + (cr1->up() ? 0.0 : stemWidth);
+                        }
 
                   //feathered beams
                   qreal yo   = py1 + bl * _beamDist * _grow1;
